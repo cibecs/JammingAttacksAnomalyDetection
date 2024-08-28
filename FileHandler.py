@@ -1,20 +1,25 @@
 class FileHandler: 
     # Read file and return data
-    def __readFile (filename): 
-        data = None
-        with open(filename, 'r') as file: 
-            data = file.read() 
-            
-        if data is None: 
-            raise FileNotFoundError('File not found')
+    def __readFile (filename, maxLines): 
+        data = []
+        f = open(filename, 'r')
+
+        for _ in range (maxLines):
+            line = f.readline()
+            if not line: 
+                break
+            data.append(line)
+
+        if len(data) == 0: 
+            raise FileNotFoundError('File not found or empty')
         
         return data
     def __parseData (data): 
         parsedData = []
-        for line in data.split('\n'): 
+        for line in data: 
             parsedData.append(float(line))
         return parsedData
 
-    def readAndParseFile (filename): 
-        data = FileHandler.__readFile(filename)
+    def readAndParseFile (filename, maxLines): 
+        data = FileHandler.__readFile(filename, maxLines)
         return FileHandler.__parseData(data)   
