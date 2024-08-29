@@ -7,8 +7,10 @@ from Plotter import Plotter
 
 from ParametersBasedTestRunner import ParametersBasedTestRunner
 
+from Constants import Constants
+
 N_ESTIMATORS = 100
-MAX_SAMPLES = 1
+MAX_SAMPLES = 1.0
 CONTAMINATION = 0.1
 
 def main():
@@ -16,16 +18,17 @@ def main():
     normalTrafficFile = 'data/normal_channel.txt'
     normalTraffic = FileHandler.readAndParseFile(normalTrafficFile, 1000)
 
-    periodicJammingFile = 'data/periodic_jammer.txt'
-    periodicJamming = FileHandler.readAndParseFile(periodicJammingFile, 4000)
+    constantJammingFilename = 'data/constant_jammer.txt'
+    constantJamming = FileHandler.readAndParseFile(constantJammingFilename, 4000)
 
-    groundTruth = np.ones(len (periodicJamming))
+    groundTruth = Constants.OUTLIERS * np.ones(len (constantJamming))
 
-    tr = ParametersBasedTestRunner(normalTraffic, periodicJamming, groundTruth, N_ESTIMATORS, CONTAMINATION, MAX_SAMPLES)
+    tr = ParametersBasedTestRunner(normalTraffic, constantJamming, groundTruth, N_ESTIMATORS, CONTAMINATION, MAX_SAMPLES)
 
     results = tr.variableContaminationTest(0.01, 0.5, 0.01)
 
-    print(results)
+    for r in results: 
+        print(r)
 
 
 

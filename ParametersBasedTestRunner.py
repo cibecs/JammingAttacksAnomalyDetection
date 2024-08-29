@@ -4,6 +4,7 @@ import numpy as np
 from TestResult import TestResult
 from AnomalyClassifier import AnomalyClassifier
 from ResultMetrics import ResultMetrics
+from Constants import Constants
 
 
 
@@ -31,9 +32,9 @@ class ParametersBasedTestRunner:
     
     def calculateResultMetrics (self, classificationResults): 
         accuracy = accuracy_score(self.__groundTruth, classificationResults)
-        precision = precision_score(self.__groundTruth, classificationResults)
-        recall = recall_score(self.__groundTruth, classificationResults)
-        f1 = f1_score(self.__groundTruth, classificationResults)
-        confusionMatrix = confusion_matrix(self.__groundTruth, classificationResults, labels=[-1, 1])
+        precision = precision_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS)
+        recall = recall_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
+        f1 = f1_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS)
+        confusionMatrix = confusion_matrix(self.__groundTruth, classificationResults, labels=[Constants.OUTLIERS, Constants.INLIERS])
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
