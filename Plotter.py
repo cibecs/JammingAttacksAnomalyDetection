@@ -10,8 +10,24 @@ class Plotter:
         plt.legend(graphLabels)
         plt.show()
 
-    def plotGraphs(x, graphs, graphLabels, colors, graphTitle, axisLabels): 
+    def plotInSameGraph(x, graphs, graphLabels, colors, graphTitle, axisLabels): 
         for i in range(len(graphs)): 
             plt.plot(x, graphs[i], color=colors[i])
         Plotter.labelGraph(axisLabels[0], axisLabels[1], graphLabels, graphTitle)
     
+
+    #plots side by side graphs containing multiple functions inside
+    def plotSideToSide (x, graphs, graphLabels, colors, graphTitle, axisLabels): 
+        fig, axs = plt.subplots(1,len(graphs)) 
+        for i in range (len(graphs)):
+            for j in range (len(graphs[i])): 
+                axs[i].plot(x[i], graphs[i][j], color=colors[i][j], label = graphLabels[i][j])
+
+            axs[i].set_xlabel(axisLabels[i][0])
+            axs[i].set_ylabel(axisLabels[i][1])
+            axs[i].set_title(graphTitle[i])
+            axs[i].legend()
+        plt.tight_layout()
+        plt.show()
+            
+
