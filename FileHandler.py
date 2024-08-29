@@ -1,3 +1,5 @@
+import numpy as np
+
 class FileHandler: 
     # Read file and return data
     def __readFile (filename, maxLines): 
@@ -18,7 +20,7 @@ class FileHandler:
         parsedData = []
         for line in data: 
             parsedData.append(float(line))
-        return parsedData
+        return np.array(parsedData).reshape(-1,1)
 
     def readAndParseFile (filename, maxLines): 
         data = FileHandler.__readFile(filename, maxLines)

@@ -17,17 +17,18 @@ class Plotter:
     
 
     #plots side by side graphs containing multiple functions inside
-    def plotSideToSide (x, graphs, graphLabels, colors, graphTitle, axisLabels): 
+    def plotSideToSide (xAxes, graphs, graphLabels, colors, graphTitle, axesLabels): 
         fig, axs = plt.subplots(1,len(graphs)) 
         for i in range (len(graphs)):
             for j in range (len(graphs[i])): 
-                axs[i].plot(x[i], graphs[i][j], color=colors[i][j], label = graphLabels[i][j])
+                axs[i].plot(xAxes[i], graphs[i][j], color=colors[i][j], label = graphLabels[i][j])
 
-            axs[i].set_xlabel(axisLabels[i][0])
-            axs[i].set_ylabel(axisLabels[i][1])
+            axs[i].set_xlabel(axesLabels[i][0])
+            axs[i].set_ylabel(axesLabels[i][1])
             axs[i].set_title(graphTitle[i])
             axs[i].legend()
         plt.tight_layout()
         plt.show()
-            
+    
+          
 
