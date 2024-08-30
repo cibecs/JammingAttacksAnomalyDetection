@@ -30,5 +30,8 @@ class Plotter:
         plt.tight_layout()
         plt.show()
     
-          
+    def scatterPlot (xPoints, yPoints, graphLabels, colors, graphTitle, axisLabels): 
+        for i in range(len(xPoints)): 
+            plt.scatter(xPoints[i], yPoints[i], color=colors[i], label=graphLabels[i], s=5)
+        Plotter.labelGraph(axisLabels[0], axisLabels[1], graphLabels, graphTitle)
 
