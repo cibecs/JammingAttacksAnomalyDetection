@@ -9,23 +9,27 @@ from ParametersBasedTestRunner import ParametersBasedTestRunner
 
 from Constants import Constants
 
-N_ESTIMATORS = 100
+N_ESTIMATORS = 50
 MAX_SAMPLES = 1.0
 CONTAMINATION = 0.1
 
 def main():
 
     normalTrafficFile = 'data/normal_channel.txt'
-    normalTraffic = FileHandler.readAndParseFile(normalTrafficFile, 1000)
+    normalTraffic = FileHandler.readAndParseFile(normalTrafficFile, 10000)
 
     constantJammingFilename = 'data/constant_jammer.txt'
-    constantJamming = FileHandler.readAndParseFile(constantJammingFilename, 4000)
+    constantJamming = FileHandler.readAndParseFile(constantJammingFilename, 10000)
 
-    groundTruth = Constants.OUTLIERS * np.ones(len (constantJamming))
+    
 
-    tr = ParametersBasedTestRunner(normalTraffic, constantJamming, groundTruth, N_ESTIMATORS, CONTAMINATION, MAX_SAMPLES)
+    testInput = np.concatenate((normalTraffic, constantJamming))
 
-    results = tr.variableContaminationTest(0.01, 0.5, 0.01)
+    groundTruth = np.concatenate((Constants.INLIERS * np.ones(len(normalTraffic)), Constants.OUTLIERS * np.ones(len(constantJamming))))
+
+    tr = ParametersBasedTestRunner(normalTraffic[:2000], testInput, groundTruth, N_ESTIMATORS, CONTAMINATION, MAX_SAMPLES)
+
+    results = tr.variableContaminationTest(0.1, 0.5, 0.1)
 
     for r in results: 
         print(r)
