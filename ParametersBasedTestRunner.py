@@ -22,10 +22,9 @@ class ParametersBasedTestRunner:
         results = []
         
         for i in np.arange(startingContaminationValue, endingContaminationValue, stepSize): 
-            classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, i, self.__max_samples)
-            classifier.trainModel()
-            classificationResults = classifier.classify(self.__testingSample)
-            results.append(TestResult(self.__testingSample, self.__n_estimators, i, self.__max_samples, classificationResults, self.calculateResultMetrics(classificationResults)))
+            self.__contamination = i
+            result = self.runTest()
+            results.append(result)
 
         return results
     
@@ -38,3 +37,9 @@ class ParametersBasedTestRunner:
         confusionMatrix = confusion_matrix(self.__groundTruth, classificationResults, labels=[Constants.INLIERS, Constants.OUTLIERS])
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
+    
+    def runTest (self): 
+        classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        classifier.trainModel()
+        classificationResults = classifier.classify(self.__testingSample)
+        return TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, classificationResults, self.calculateResultMetrics(classificationResults))

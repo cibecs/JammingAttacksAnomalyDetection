@@ -9,6 +9,6 @@ class ResultMetrics:
         self.tn, self.fp, self.fn, self.tp = confusionMatrix.ravel()
     
     def __str__(self):
-        return f"\n\tAccuracy: {self.accuracy}, Precision: {self.precision}, Recall: {self.recall}, F1: {self.f1}\n\t\tTN: {self.tn}, FP: {self.fp}, FN: {self.fn}, TP: {self.tp}"
+        return f"\n\tAccuracy: {self.accuracy}, Precision: {self.precision}, Recall: {self.recall}, F1: {self.f1}\n\t\tTP: {self.tp}, FN: {self.fn}, FP: {self.fp}, TN: {self.tn}"
 
     
