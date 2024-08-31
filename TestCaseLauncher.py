@@ -4,6 +4,7 @@ from Constants import Constants
 from ParametersBasedTestRunner import ParametersBasedTestRunner
 from FileHandler import FileHandler
 from Plotter import Plotter
+from TestResult import TestResult
 
 #---- PARAMETERS ----#
 
@@ -14,16 +15,13 @@ NORMAL_TRAFFIC_FILE = 'data/normal_traffic.txt'
 CONSTANT_JAMMING_SIZE = 2000
 CONSTANT_JAMMING_FILE = 'data/constant_jammer.txt'
 
-PERIODIC_JAMMING_SIZE = 2000
+PERIODIC_JAMMING_SIZE = 1300
 PERIODIC_JAMMING_FILE = 'data/periodic_jammer.txt'
 
 #---- MODEL ----#
 N_ESTIMATORS = 100
 MAX_SAMPLES = 1.0
 CONTAMINATION = 0.1
-
-
-
 
 
 
@@ -45,7 +43,28 @@ class TestCaseLauncher:
     def __getConstantJammingGroundTruth(self): 
         return Constants.OUTLIERS * np.ones(len(self.__constantJamming))
     def __getPeriodicJammingGroundTruth(self): 
-        raise Exception('Not implemented')
+        start_offset = 293
+        pause = 556
+        jamming_time = 373
+
+        #293 V + 372 + 557 = 1223
+        #293 V + 373 + 556 = 1222
+
+        # 1224
+
+        samplesNumber = PERIODIC_JAMMING_SIZE
+
+        ground_truth = Constants.INLIERS * np.ones(samplesNumber)
+
+        for i in range (0, int(samplesNumber/(jamming_time + pause)) + 1): 
+            jamming_start = start_offset + i *(jamming_time + pause)
+            jamming_end = jamming_start + jamming_time
+            if (jamming_start >= samplesNumber):
+                break
+            if (jamming_end >= samplesNumber):
+                jamming_end = samplesNumber
+            ground_truth[jamming_start:jamming_end] = Constants.OUTLIERS
+        return ground_truth
     
     def __getJammingSignalAndGroundTruth(self, signalType):
         if signalType == Constants.CONSTANT_JAMMING: 
@@ -93,7 +112,7 @@ class TestCaseLauncher:
         if displayPlot:
             self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Basic Normal Traffic and Jamming Signal Concatenated Test', ['Data Point', 'RSSI[dBm]'])
 
-
+    #Runs tests where a parameter is increased in a range
     def increasingMetricTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
         self.__prepareModel(jammingType)
         results = self.__pbtr.increasingParameterTest(startValue, endValue, stepSize, parameter_id)
@@ -103,4 +122,10 @@ class TestCaseLauncher:
         if displayPlot:
             x = np.arange(startValue, endValue, stepSize)
             self.__plotMetrics(x, results, ['Accuracy', 'Precision', 'Recall', 'F1'], ['b', 'r', 'g', 'm'], 'Increasing ' + parameter_id + ' Test', [parameter_id, 'Metric Value'])
+    
+    def groundTruthTest (self, jammingType): 
+        signal, groundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
+        r = TestResult (signal, 0, 0, 0, groundTruth, None)
+        self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground Truth Test', ['Data Point', 'RSSI[dBm]'])
+
     
