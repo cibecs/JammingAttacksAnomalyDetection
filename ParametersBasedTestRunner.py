@@ -17,19 +17,8 @@ class ParametersBasedTestRunner:
         self.__max_samples = max_samples
         self.__groundTruth = groundTruth
 
-    
-    def variableContaminationTest (self, startingContaminationValue, endingContaminationValue, stepSize): 
-        results = []
-
-        for i in np.arange(startingContaminationValue, endingContaminationValue, stepSize): 
-            self.__contamination = i
-            result = self.runTest()
-            results.append(result)
-
-        return results
-    
-    
-    def calculateResultMetrics (self, classificationResults): 
+    #Calculates the result metrics based on the classification results
+    def __calculateResultMetrics (self, classificationResults): 
         accuracy = accuracy_score(self.__groundTruth, classificationResults)
         precision = precision_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
         recall = recall_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
@@ -38,8 +27,40 @@ class ParametersBasedTestRunner:
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
     
+    #Trains the model with the current parameters and classifies the testing sample
     def runTest (self): 
         classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
         classifier.trainModel()
         classificationResults = classifier.classify(self.__testingSample)
-        return TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, classificationResults, self.calculateResultMetrics(classificationResults))
+        return TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, classificationResults, self.__calculateResultMetrics(classificationResults))
+    
+    #Sets the parameter to the value given
+    def __setChosenParameter(self, parameter, value): 
+        if parameter == Constants.N_ESTIMATORS_ID: 
+            self.__n_estimators = value
+        elif parameter == Constants.CONTAMINATION_ID: 
+            self.__contamination = value
+        elif parameter == Constants.MAX_SAMPLES_ID: 
+            self.__max_samples = value
+        else: 
+            raise Exception('Invalid test parameter chosen for testing')
+    
+    #Used to run all tests where a parameter is increased in a range
+    def __increasingParameterTest (self, startingValue, endingValue, stepSize, parameter): 
+        results = []
+
+        for i in np.arange(startingValue, endingValue, stepSize): 
+            self.__setChosenParameter(parameter, i)
+            result = self.runTest()
+            results.append(result)
+
+        return results
+
+    #Increases the contamination value and runs the test
+    def variableContaminationTest (self, startingContaminationValue, endingContaminationValue, stepSize): 
+        return self.__increasingParameterTest(startingContaminationValue, endingContaminationValue, stepSize, Constants.CONTAMINATION_ID)
+    
+    #Increases the number of estimators and runs the test
+    def variableEstimatorsTest (self, startingEstimatorsValue, endingEstimatorsValue, stepSize): 
+        return self.__increasingParameterTest(startingEstimatorsValue, endingEstimatorsValue, stepSize, Constants.N_ESTIMATORS_ID)
+    

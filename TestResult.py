@@ -9,6 +9,6 @@ class TestResult:
         self.resultMetrics = resultMetrics
     
     def __str__(self):
-        return f"n_estimators: {self.n_estimators}, contamination: {self.contamination}, max_samples: {self.max_samples} resultMetrics: {self.resultMetrics}"
+        return f"n_estimators: {self.n_estimators}, contamination: {self.contamination}, testing_size: {len(self.classification)} resultMetrics: {self.resultMetrics}"
 
 
