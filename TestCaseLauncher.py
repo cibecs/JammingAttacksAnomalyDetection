@@ -24,10 +24,7 @@ CONTAMINATION = 0.1
 
 
 
-#---- CONTAMINATION TEST ----#
-START_CONTAMINATION = 0.01
-END_CONTAMINATION = 0.5
-STEP_SIZE_CONTAMINATION = 0.01
+
 
 
 #This class launches the test cases by setting the parameters and plots the results
@@ -95,16 +92,15 @@ class TestCaseLauncher:
             print(result)
         if displayPlot:
             self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Basic Normal Traffic and Jamming Signal Concatenated Test', ['Data Point', 'RSSI[dBm]'])
-    
-    #Runs increasing contamination test and analyzes the result metrics (accuracy, precision, recall, f1, confusion matrix)
-    def increasingContaminationTest (self, jammingType, displayResultMetrics = True, displayPlot = True):
+
+
+    def increasingMetricTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
         self.__prepareModel(jammingType)
-        results = self.__pbtr.variableContaminationTest(START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION)
+        results = self.__pbtr.increasingParameterTest(startValue, endValue, stepSize, parameter_id)
         if displayResultMetrics: 
             for result in results: 
                 print(result)
         if displayPlot:
-            x = np.arange(START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION)
-            self.__plotMetrics(x, results, ['Accuracy', 'Precision', 'Recall', 'F1'], ['b', 'r', 'g', 'm'], 'Increasing Contamination Test', ['Contamination', 'Metric Value'])
-
-    #Runs increasing number of estimators test and analyzes the result metrics 
+            x = np.arange(startValue, endValue, stepSize)
+            self.__plotMetrics(x, results, ['Accuracy', 'Precision', 'Recall', 'F1'], ['b', 'r', 'g', 'm'], 'Increasing ' + parameter_id + ' Test', [parameter_id, 'Metric Value'])
+    

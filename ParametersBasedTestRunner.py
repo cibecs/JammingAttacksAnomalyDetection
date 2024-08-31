@@ -46,7 +46,7 @@ class ParametersBasedTestRunner:
             raise Exception('Invalid test parameter chosen for testing')
     
     #Used to run all tests where a parameter is increased in a range
-    def __increasingParameterTest (self, startingValue, endingValue, stepSize, parameter): 
+    def increasingParameterTest (self, startingValue, endingValue, stepSize, parameter): 
         results = []
 
         for i in np.arange(startingValue, endingValue, stepSize): 
@@ -56,11 +56,4 @@ class ParametersBasedTestRunner:
 
         return results
 
-    #Increases the contamination value and runs the test
-    def variableContaminationTest (self, startingContaminationValue, endingContaminationValue, stepSize): 
-        return self.__increasingParameterTest(startingContaminationValue, endingContaminationValue, stepSize, Constants.CONTAMINATION_ID)
-    
-    #Increases the number of estimators and runs the test
-    def variableEstimatorsTest (self, startingEstimatorsValue, endingEstimatorsValue, stepSize): 
-        return self.__increasingParameterTest(startingEstimatorsValue, endingEstimatorsValue, stepSize, Constants.N_ESTIMATORS_ID)
     

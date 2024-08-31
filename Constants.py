@@ -8,6 +8,6 @@ class Constants:
     PERIODIC_JAMMING = 2
 
     #---- TESTED PARAMETERS ----#
-    N_ESTIMATORS_ID = 1
-    CONTAMINATION_ID = 2
-    MAX_SAMPLES_ID = 3
+    N_ESTIMATORS_ID = "n_estimators"
+    CONTAMINATION_ID = "contamination"
+    MAX_SAMPLES_ID = "max_samples"
