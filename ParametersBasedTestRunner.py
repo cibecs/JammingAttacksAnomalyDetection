@@ -7,7 +7,7 @@ from ResultMetrics import ResultMetrics
 from Constants import Constants
 
 
-
+#This class runs the tests and returns the results
 class ParametersBasedTestRunner:
     def __init__(self, trainingSample, testingSample, groundTruth, n_estimators, contamination, max_samples): 
         self.__trainingSample = trainingSample
@@ -20,7 +20,7 @@ class ParametersBasedTestRunner:
     
     def variableContaminationTest (self, startingContaminationValue, endingContaminationValue, stepSize): 
         results = []
-        
+
         for i in np.arange(startingContaminationValue, endingContaminationValue, stepSize): 
             self.__contamination = i
             result = self.runTest()

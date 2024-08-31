@@ -8,7 +8,7 @@ from Plotter import Plotter
 #---- PARAMETERS ----#
 
 #---- DATA ----#
-NORMAL_TRAFFIC_SIZE = 2000
+NORMAL_TRAFFIC_SIZE = 40000
 NORMAL_TRAFFIC_FILE = 'data/normal_traffic.txt'
 
 CONSTANT_JAMMING_SIZE = 2000
@@ -18,7 +18,7 @@ PERIODIC_JAMMING_SIZE = 2000
 PERIODIC_JAMMING_FILE = 'data/periodic_jammer.txt'
 
 #---- MODEL ----#
-N_ESTIMATORS = 50
+N_ESTIMATORS = 100
 MAX_SAMPLES = 1.0
 CONTAMINATION = 0.1
 
@@ -30,7 +30,7 @@ END_CONTAMINATION = 0.2
 STEP_SIZE_CONTAMINATION = 0.1
 
 
-
+#This class launches the test cases by setting the parameters and plots the results
 class TestCaseLauncher: 
 
     def __init__(self): 
@@ -41,7 +41,8 @@ class TestCaseLauncher:
         self.__maxSamples = MAX_SAMPLES
         self.__contamination = CONTAMINATION
         self.__pbtr = None
-
+    
+    #returns the ground truth for the various types of data
     def getNormalTrafficGroundTruth(self): 
         return Constants.INLIERS * np.ones(len(self.__normalTraffic))
     def getConstantJammingGroundTruth(self): 
@@ -49,6 +50,15 @@ class TestCaseLauncher:
     def getPeriodicJammingGroundTruth(self): 
         raise Exception('Not implemented')
     
+    def getJammingSignalAndGroundTruth(self, signalType):
+        if signalType == Constants.CONSTANT_JAMMING: 
+            return self.__constantJamming, self.getConstantJammingGroundTruth()
+        elif signalType == Constants.PERIODIC_JAMMING: 
+            return self.__periodicJamming, self.getPeriodicJammingGroundTruth()
+        else: 
+            raise Exception('Invalid signal type')
+
+    #Splits the data points based on the classification results
     def separateInliersFromOutliers (self, inputData, classificationResults): 
         x = range(len(inputData))
         normal_x = [x[i] for i in range(len(x)) if classificationResults[i] == 1]
@@ -58,10 +68,11 @@ class TestCaseLauncher:
         return [normal_x, jamming_x], [normal_y, jamming_y]
     
     #Simple normal traffic concatenated with constant jamming test
-    def basicNormalConstantConcatenatedTest(self, displayResultMetrics = True, displayPlot = True ): 
+    def basicNormalJammingConcatenatedTest(self, jammingType, displayResultMetrics = True, displayPlot = True ): 
         trainingSample = self.__normalTraffic
-        testInput = np.concatenate((self.__normalTraffic, self.__constantJamming))
-        groundTruth = np.concatenate((self.getNormalTrafficGroundTruth(), self.getConstantJammingGroundTruth()))
+        jammingTestInput, jammingGroundTruth = self.getJammingSignalAndGroundTruth(jammingType)
+        testInput = np.concatenate((self.__normalTraffic, jammingTestInput))
+        groundTruth = np.concatenate((self.getNormalTrafficGroundTruth(), jammingGroundTruth))
         self.__pbtr = ParametersBasedTestRunner(trainingSample, testInput, groundTruth, self.__nEstimators, self.__contamination, self.__maxSamples)
         result = self.__pbtr.runTest()
         if displayResultMetrics: 
@@ -69,5 +80,7 @@ class TestCaseLauncher:
         if displayPlot:
             x,y = self.separateInliersFromOutliers(result.inputData, result.classification)
             Plotter.scatterPlot(x, y, ['Normal Traffic', 'Jamming'], ["b", "r"], 'Normal Traffic and Constant Jamming Concatenated Test', ['Samples', 'RSSI[dBm]'])
-        
+    
+    #Runs increasing contamination test and analyzes the result metrics (accuracy, precision, recall, f1, confusion matrix)
+
 
