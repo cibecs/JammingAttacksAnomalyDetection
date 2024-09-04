@@ -1,6 +1,6 @@
 
 class TestResult: 
-    def __init__ (self, inputData, n_estimators, contamination, max_samples, classification, resultMetrics, trainingTime, classificationTime = None): 
+    def __init__ (self, inputData, n_estimators, contamination, max_samples, classification, resultMetrics, trainingTime = None, classificationTime = None): 
         self.inputData = inputData
         self.n_estimators = n_estimators
         self.contamination = contamination
@@ -15,7 +15,7 @@ class TestResult:
         if (self.classificationTime is not None): 
             toString += f"\n\tClassification time: {self.classificationTime}"
         if (self.trainingTime is not None):
-            toString += f"\n\tExecution time: {self.trainingTime}"
+            toString += f"\n\Training time: {self.trainingTime}"
         return toString
 
 

@@ -62,12 +62,15 @@ class ParametersBasedTestRunner:
 
         return results
 
+    #evaluates the training time needed for the model to be trained
     def evaluateTrainingTime (self): 
         self.__classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
         return timeit.timeit(self.__classifier.trainModel, number=1)
-    
+
+    #To evaluate the classification time of a single sample
     def evaluateClassificationTime (self): 
-        return timeit.timeit(lambda: self.__classifier.classify(self.__testingSample), number=1)
+        testingSample = self.__testingSample
+        return timeit.timeit(lambda: self.__classifier.classify(testingSample), number=1)
     
     def increasingTimeTest(self, startingValue, endingValue, stepSize, parameter): 
         results = []

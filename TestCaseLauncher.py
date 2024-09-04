@@ -6,35 +6,27 @@ from FileHandler import FileHandler
 from Plotter import Plotter
 from TestResult import TestResult
 
-#---- PARAMETERS ----#
-
 #---- DATA ----#
-NORMAL_TRAFFIC_SIZE = 20000
+
 NORMAL_TRAFFIC_FILE = 'data/normal_traffic.txt'
 
-CONSTANT_JAMMING_SIZE = 2000
 CONSTANT_JAMMING_FILE = 'data/constant_jammer.txt'
 
-PERIODIC_JAMMING_SIZE = 2000
 PERIODIC_JAMMING_FILE = 'data/periodic_jammer.txt'
 
-#---- MODEL ----#
-N_ESTIMATORS = 100
-MAX_SAMPLES = 1.0
-CONTAMINATION = 0.1
 
 
 
 #This class launches the test cases by setting the parameters and plots the results
 class TestCaseLauncher: 
 
-    def __init__(self): 
-        self.__normalTraffic = FileHandler.readAndParseFile(NORMAL_TRAFFIC_FILE, NORMAL_TRAFFIC_SIZE)
-        self.__constantJamming = FileHandler.readAndParseFile(CONSTANT_JAMMING_FILE, CONSTANT_JAMMING_SIZE)
-        self.__periodicJamming = FileHandler.readAndParseFile(PERIODIC_JAMMING_FILE, PERIODIC_JAMMING_SIZE)
-        self.__nEstimators = N_ESTIMATORS
-        self.__maxSamples = MAX_SAMPLES
-        self.__contamination = CONTAMINATION
+    def __init__(self, n_estimators, max_samples, contamination, normal_traffic_size, constant_jamming_size, periodic_jamming_size): 
+        self.__normalTraffic = FileHandler.readAndParseFile(NORMAL_TRAFFIC_FILE, normal_traffic_size)
+        self.__constantJamming = FileHandler.readAndParseFile(CONSTANT_JAMMING_FILE, constant_jamming_size)
+        self.__periodicJamming = FileHandler.readAndParseFile(PERIODIC_JAMMING_FILE, periodic_jamming_size)
+        self.__nEstimators = n_estimators
+        self.__maxSamples = max_samples
+        self.__contamination = contamination
         self.__pbtr = None
     
     #returns the ground truth for the various types of data
@@ -51,7 +43,7 @@ class TestCaseLauncher:
         # 293 + 370 + 560 = 1223 3 
         # 373 + 557 + 293 = 1223 2 
 
-        samplesNumber = PERIODIC_JAMMING_SIZE
+        samplesNumber = len(self.__periodicJamming)
 
         ground_truth = Constants.INLIERS * np.ones(samplesNumber)
 
@@ -105,7 +97,8 @@ class TestCaseLauncher:
     def __plotTime (self, x, results, labels, colors, title, axisLabels): 
             trainingTime = [result.trainingTime for result in results]
             classificationTime = [result.classificationTime for result in results]
-            Plotter.plotInSameGraph(x, [trainingTime,classificationTime], labels, colors, title, axisLabels)
+            Plotter.plotInSameGraph(x, [trainingTime], [labels[0]], colors[0], title, axisLabels)
+            Plotter.plotInSameGraph(x, [classificationTime], [labels[1]], colors[1], title, axisLabels)
 
     #Simple normal traffic concatenated with constant jamming test
     def basicNormalJammingConcatenatedTest(self, jammingType, displayResultMetrics = True, displayPlot = True ): 
