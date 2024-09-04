@@ -7,6 +7,8 @@ from AnomalyClassifier import AnomalyClassifier
 from ResultMetrics import ResultMetrics
 from Constants import Constants
 
+from MajorityRuleAnomalyClassifier import MajorityRuleAnomalyClassifier
+
 
 #This class runs the tests and returns the results
 class ParametersBasedTestRunner:
