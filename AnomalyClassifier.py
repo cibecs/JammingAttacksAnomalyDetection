@@ -19,16 +19,3 @@ class AnomalyClassifier:
         if (self.__model is None): 
             raise Exception('Model not trained')
         return self.__model.predict(data)
-    
-    def setTrainingSample (self, trainingSample): 
-        self.__trainingSample = trainingSample
-        self.trainModel()
-    
-    def setN_estimators (self, n_estimators): 
-        self.__n_estimators = n_estimators
-        self.trainModel()
-    
-    def setContamination (self, contamination):
-        self.__contamination = contamination
-        self.trainModel()
-    
