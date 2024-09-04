@@ -9,13 +9,13 @@ from TestResult import TestResult
 #---- PARAMETERS ----#
 
 #---- DATA ----#
-NORMAL_TRAFFIC_SIZE = 2000
+NORMAL_TRAFFIC_SIZE = 20000
 NORMAL_TRAFFIC_FILE = 'data/normal_traffic.txt'
 
 CONSTANT_JAMMING_SIZE = 2000
 CONSTANT_JAMMING_FILE = 'data/constant_jammer.txt'
 
-PERIODIC_JAMMING_SIZE = 1300
+PERIODIC_JAMMING_SIZE = 2000
 PERIODIC_JAMMING_FILE = 'data/periodic_jammer.txt'
 
 #---- MODEL ----#
@@ -44,13 +44,12 @@ class TestCaseLauncher:
         return Constants.OUTLIERS * np.ones(len(self.__constantJamming))
     def __getPeriodicJammingGroundTruth(self): 
         start_offset = 293
-        pause = 556
-        jamming_time = 373
-
-        #293 V + 372 + 557 = 1223
-        #293 V + 373 + 556 = 1222
-
-        # 1224
+        pause = 557
+        jamming_time = 372
+        
+        # 293 + 372 + 557 = 1222 1
+        # 293 + 370 + 560 = 1223 3 
+        # 373 + 557 + 293 = 1223 2 
 
         samplesNumber = PERIODIC_JAMMING_SIZE
 
@@ -102,6 +101,11 @@ class TestCaseLauncher:
             recall = [result.resultMetrics.recall for result in results]
             f1 = [result.resultMetrics.f1 for result in results]
             Plotter.plotInSameGraph(x, [accuracy, precision, recall, f1], labels, colors, title, axisLabels)
+        
+    def __plotTime (self, x, results, labels, colors, title, axisLabels): 
+            trainingTime = [result.trainingTime for result in results]
+            classificationTime = [result.classificationTime for result in results]
+            Plotter.plotInSameGraph(x, [trainingTime,classificationTime], labels, colors, title, axisLabels)
 
     #Simple normal traffic concatenated with constant jamming test
     def basicNormalJammingConcatenatedTest(self, jammingType, displayResultMetrics = True, displayPlot = True ): 
@@ -113,7 +117,7 @@ class TestCaseLauncher:
             self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Basic Normal Traffic and Jamming Signal Concatenated Test', ['Data Point', 'RSSI[dBm]'])
 
     #Runs tests where a parameter is increased in a range
-    def increasingMetricTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
+    def increasingMetricParameterTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
         self.__prepareModel(jammingType)
         results = self.__pbtr.increasingParameterTest(startValue, endValue, stepSize, parameter_id)
         if displayResultMetrics: 
@@ -128,4 +132,12 @@ class TestCaseLauncher:
         r = TestResult (signal, 0, 0, 0, groundTruth, None)
         self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground Truth Test', ['Data Point', 'RSSI[dBm]'])
 
-    
+    def increasingMetricTimeTest(self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True): 
+        self.__prepareModel(jammingType)
+        results = self.__pbtr.increasingTimeTest(startValue, endValue, stepSize, parameter_id)
+        if displayResultMetrics: 
+            for result in results: 
+                print(result)
+        if displayPlot:
+            x = np.arange(startValue, endValue, stepSize)
+            self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Increasing ' + parameter_id + ' Time Test', [parameter_id, 'Time[s]'])

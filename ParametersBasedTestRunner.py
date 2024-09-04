@@ -1,5 +1,6 @@
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import numpy as np
+import timeit
 
 from TestResult import TestResult
 from AnomalyClassifier import AnomalyClassifier
@@ -16,6 +17,7 @@ class ParametersBasedTestRunner:
         self.__testingSample = testingSample
         self.__max_samples = max_samples
         self.__groundTruth = groundTruth
+        self.__classifier = None
 
     #Calculates the result metrics based on the classification results
     def __calculateResultMetrics (self, classificationResults): 
@@ -26,12 +28,16 @@ class ParametersBasedTestRunner:
         confusionMatrix = confusion_matrix(self.__groundTruth, classificationResults, labels=[Constants.INLIERS, Constants.OUTLIERS])
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
+
+    #Prepares the test by training the model
+    def __prepareTest(self): 
+        self.__classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        self.__classifier.trainModel()
     
     #Trains the model with the current parameters and classifies the testing sample
     def runTest (self): 
-        classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
-        classifier.trainModel()
-        classificationResults = classifier.classify(self.__testingSample)
+        self.__prepareTest()
+        classificationResults = self.__classifier.classify(self.__testingSample)
         return TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, classificationResults, self.__calculateResultMetrics(classificationResults))
     
     #Sets the parameter to the value given
@@ -56,4 +62,21 @@ class ParametersBasedTestRunner:
 
         return results
 
+    def evaluateTrainingTime (self): 
+        self.__classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        return timeit.timeit(self.__classifier.trainModel, number=1)
     
+    def evaluateClassificationTime (self): 
+        return timeit.timeit(lambda: self.__classifier.classify(self.__testingSample), number=1)
+    
+    def increasingTimeTest(self, startingValue, endingValue, stepSize, parameter): 
+        results = []
+
+        for i in np.arange(startingValue, endingValue, stepSize): 
+            self.__setChosenParameter(parameter, i)
+            trainingTime = self.evaluateTrainingTime()
+            classificationTime = self.evaluateClassificationTime()
+            result = TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, [], [], trainingTime, classificationTime)
+            results.append(result)
+
+        return results
