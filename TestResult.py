@@ -15,7 +15,7 @@ class TestResult:
         if (self.classificationTime is not None): 
             toString += f"\n\tClassification time: {self.classificationTime}"
         if (self.trainingTime is not None):
-            toString += f"\n\Training time: {self.trainingTime}"
+            toString += f"\n\tTraining time: {self.trainingTime}"
         return toString
 
 

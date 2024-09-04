@@ -33,7 +33,7 @@ class ParametersBasedTestRunner:
 
     #Prepares the test by training the model
     def __prepareTest(self): 
-        self.__classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        self.__classifier = MajorityRuleAnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
         self.__classifier.trainModel()
     
     #Trains the model with the current parameters and classifies the testing sample
@@ -66,7 +66,7 @@ class ParametersBasedTestRunner:
 
     #evaluates the training time needed for the model to be trained
     def evaluateTrainingTime (self): 
-        self.__classifier = AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        self.__classifier = MajorityRuleAnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
         return timeit.timeit(self.__classifier.trainModel, number=1)
 
     #To evaluate the classification time of a single sample

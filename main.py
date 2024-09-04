@@ -28,13 +28,13 @@ STEP_SIZE_ESTIMATORS = 10
 #---- MAX SAMPLES TEST ----#
 START_MAX_SAMPLES = 1
 END_MAX_SAMPLES = NORMAL_TRAFFIC_SIZE
-STEP_SIZE_MAX_SAMPLES = 10
+STEP_SIZE_MAX_SAMPLES = 100
 
 
 
 def main():
     runBasicTests(Constants.PERIODIC_JAMMING,True, True)
-    runTimeTests(Constants.PERIODIC_JAMMING, False, True)
+    runTimeTests(Constants.PERIODIC_JAMMING, True, True)
 
 
 def runBasicTests(testType,logResults, plotResults):
@@ -57,8 +57,8 @@ def runMetricsTests(testType, logResults, plotResults):
 def runTimeTests(testType, logResults, plotResults): 
     tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, CONSTANT_JAMMING_SIZE, PERIODIC_JAMMING_SIZE)
 
-    tcl.increasingMetricTimeTest(testType, Constants.N_ESTIMATORS_ID, START_ESTIMATORS, END_ESTIMATORS, STEP_SIZE_ESTIMATORS, logResults, plotResults)
-    tcl.increasingMetricTimeTest(testType, Constants.CONTAMINATION_ID, START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION, logResults, plotResults)
+    #tcl.increasingMetricTimeTest(testType, Constants.N_ESTIMATORS_ID, START_ESTIMATORS, END_ESTIMATORS, STEP_SIZE_ESTIMATORS, logResults, plotResults)
+    #tcl.increasingMetricTimeTest(testType, Constants.CONTAMINATION_ID, START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION, logResults, plotResults)
     tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
     
     #jamming size = 1 to evaluate classification time against a single data point
@@ -66,7 +66,7 @@ def runTimeTests(testType, logResults, plotResults):
 
     tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, jamming_traffic_size, jamming_traffic_size)
 
-    tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
+    #tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
    
 
 
