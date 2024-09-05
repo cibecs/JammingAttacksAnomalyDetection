@@ -62,8 +62,8 @@ def runTimeTests(testType, logResults, plotResults):
     #tcl.increasingMetricTimeTest(testType, Constants.N_ESTIMATORS_ID, START_ESTIMATORS, END_ESTIMATORS, STEP_SIZE_ESTIMATORS, logResults, plotResults)
     #tcl.increasingMetricTimeTest(testType, Constants.CONTAMINATION_ID, START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION, logResults, plotResults)
     #tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
-    tcl.increasingMetricTimeTest(testType, Constants.TESTING_SAMPLES_SIZE_ID, 100, 10000, 100, logResults, plotResults)
-
+    #tcl.increasingMetricTimeTest(testType, Constants.TESTING_SAMPLES_SIZE_ID, 100, 10000, 100, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.TRAINING_SAMPLES_SIZE_ID, 100, 10000, 100, logResults, plotResults)
 
     #jamming_size = 1 to evaluate classification time against a single data point
     jamming_traffic_size = 1

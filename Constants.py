@@ -12,3 +12,4 @@ class Constants:
     CONTAMINATION_ID = "contamination"
     MAX_SAMPLES_ID = "max_samples"
     TESTING_SAMPLES_SIZE_ID = "testing_samples_size"
+    TRAINING_SAMPLES_SIZE_ID = "training_samples_size"

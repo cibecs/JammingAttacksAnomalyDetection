@@ -20,6 +20,7 @@ class TestRunner:
         self.__max_samples = max_samples
         self.__groundTruth = groundTruth
         self.__originalTestingSample = testingSample
+        self.__originalTrainingSample = trainingSample
         self.__classifier = None
 
     #Calculates the result metrics based on the classification results
@@ -53,6 +54,8 @@ class TestRunner:
             self.__max_samples = value
         elif parameter == Constants.TESTING_SAMPLES_SIZE_ID:
             self.__testingSample = self.__originalTestingSample[:value]
+        elif parameter == Constants.TRAINING_SAMPLES_SIZE_ID:
+            self.__trainingSample = self.__originalTrainingSample[:value]
         else: 
             raise Exception('Invalid test parameter chosen for testing')
     
