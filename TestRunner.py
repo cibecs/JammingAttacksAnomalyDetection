@@ -11,7 +11,7 @@ from MajorityRuleAnomalyClassifier import MajorityRuleAnomalyClassifier
 
 
 #This class runs the tests and returns the results
-class ParametersBasedTestRunner:
+class TestRunner:
     def __init__(self, trainingSample, testingSample, groundTruth, n_estimators, contamination, max_samples): 
         self.__trainingSample = trainingSample
         self.__n_estimators = n_estimators
@@ -19,6 +19,7 @@ class ParametersBasedTestRunner:
         self.__testingSample = testingSample
         self.__max_samples = max_samples
         self.__groundTruth = groundTruth
+        self.__originalTestingSample = testingSample
         self.__classifier = None
 
     #Calculates the result metrics based on the classification results
@@ -50,6 +51,8 @@ class ParametersBasedTestRunner:
             self.__contamination = value
         elif parameter == Constants.MAX_SAMPLES_ID: 
             self.__max_samples = value
+        elif parameter == Constants.TESTING_SAMPLES_SIZE_ID:
+            self.__testingSample = self.__originalTestingSample[:value]
         else: 
             raise Exception('Invalid test parameter chosen for testing')
     

@@ -11,7 +11,7 @@ N_ESTIMATORS = 100
 MAX_SAMPLES = 1.0
 CONTAMINATION = 0.1
 
-NORMAL_TRAFFIC_SIZE = 2000
+NORMAL_TRAFFIC_SIZE = 10000
 CONSTANT_JAMMING_SIZE = 500
 PERIODIC_JAMMING_SIZE = 500
 
@@ -33,8 +33,10 @@ STEP_SIZE_MAX_SAMPLES = 100
 
 
 def main():
-    runBasicTests(Constants.PERIODIC_JAMMING,True, True)
+    #runBasicTests(Constants.PERIODIC_JAMMING,True, True)
     runTimeTests(Constants.PERIODIC_JAMMING, True, True)
+
+
 
 
 def runBasicTests(testType,logResults, plotResults):
@@ -59,14 +61,17 @@ def runTimeTests(testType, logResults, plotResults):
 
     #tcl.increasingMetricTimeTest(testType, Constants.N_ESTIMATORS_ID, START_ESTIMATORS, END_ESTIMATORS, STEP_SIZE_ESTIMATORS, logResults, plotResults)
     #tcl.increasingMetricTimeTest(testType, Constants.CONTAMINATION_ID, START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION, logResults, plotResults)
-    tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
-    
-    #jamming size = 1 to evaluate classification time against a single data point
+    #tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.TESTING_SAMPLES_SIZE_ID, 100, 10000, 100, logResults, plotResults)
+
+
+    #jamming_size = 1 to evaluate classification time against a single data point
     jamming_traffic_size = 1
 
     tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, jamming_traffic_size, jamming_traffic_size)
 
     #tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
+
    
 
 

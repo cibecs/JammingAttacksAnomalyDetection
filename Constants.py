@@ -11,3 +11,4 @@ class Constants:
     N_ESTIMATORS_ID = "n_estimators"
     CONTAMINATION_ID = "contamination"
     MAX_SAMPLES_ID = "max_samples"
+    TESTING_SAMPLES_SIZE_ID = "testing_samples_size"

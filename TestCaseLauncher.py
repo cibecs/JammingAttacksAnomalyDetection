@@ -1,7 +1,7 @@
 import numpy as np
 
 from Constants import Constants
-from ParametersBasedTestRunner import ParametersBasedTestRunner
+from TestRunner import TestRunner
 from FileHandler import FileHandler
 from Plotter import Plotter
 from TestResult import TestResult
@@ -27,7 +27,7 @@ class TestCaseLauncher:
         self.__nEstimators = n_estimators
         self.__maxSamples = max_samples
         self.__contamination = contamination
-        self.__pbtr = None
+        self.__tr = None
     
     #returns the ground truth for the various types of data
     def __getNormalTrafficGroundTruth(self): 
@@ -65,13 +65,13 @@ class TestCaseLauncher:
         else: 
             raise Exception('Invalid signal type')
     
-    #Prepares the model for the test
+    #Prepares the model for the test. Test input is the normal traffic concatenated with the jamming signal
     def __prepareModel(self, jammingType):
         trainingSample = self.__normalTraffic
         jammingTestInput, jammingGroundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
-        testInput = np.concatenate((self.__normalTraffic, jammingTestInput))
+        testInput = np.concatenate((trainingSample, jammingTestInput))
         groundTruth = np.concatenate((self.__getNormalTrafficGroundTruth(), jammingGroundTruth))
-        self.__pbtr = ParametersBasedTestRunner(trainingSample, testInput, groundTruth, self.__nEstimators, self.__contamination, self.__maxSamples)
+        self.__tr = TestRunner(trainingSample, testInput, groundTruth, self.__nEstimators, self.__contamination, self.__maxSamples)
 
     #Splits the data points based on the classification results
     def __separateInliersFromOutliers (self, inputData, classificationResults): 
@@ -103,7 +103,7 @@ class TestCaseLauncher:
     #Simple normal traffic concatenated with constant jamming test
     def basicNormalJammingConcatenatedTest(self, jammingType, displayResultMetrics = True, displayPlot = True ): 
         self.__prepareModel(jammingType)
-        result = self.__pbtr.runTest()
+        result = self.__tr.runTest()
         if displayResultMetrics: 
             print(result)
         if displayPlot:
@@ -112,7 +112,7 @@ class TestCaseLauncher:
     #Runs tests where a parameter is increased in a range
     def increasingMetricParameterTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
         self.__prepareModel(jammingType)
-        results = self.__pbtr.increasingParameterTest(startValue, endValue, stepSize, parameter_id)
+        results = self.__tr.increasingParameterTest(startValue, endValue, stepSize, parameter_id)
         if displayResultMetrics: 
             for result in results: 
                 print(result)
@@ -125,9 +125,10 @@ class TestCaseLauncher:
         r = TestResult (signal, 0, 0, 0, groundTruth, None)
         self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground Truth Test', ['Data Point', 'RSSI[dBm]'])
 
+    #time test with increasing metric value
     def increasingMetricTimeTest(self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True): 
         self.__prepareModel(jammingType)
-        results = self.__pbtr.increasingTimeTest(startValue, endValue, stepSize, parameter_id)
+        results = self.__tr.increasingTimeTest(startValue, endValue, stepSize, parameter_id)
         if displayResultMetrics: 
             for result in results: 
                 print(result)
@@ -138,3 +139,5 @@ class TestCaseLauncher:
         if displayPlot:
             x = np.arange(startValue, endValue, stepSize)
             self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Increasing ' + parameter_id + ' Time Test', [parameter_id, 'Time[s]'])
+
+            
