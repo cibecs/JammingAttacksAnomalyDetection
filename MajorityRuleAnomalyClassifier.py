@@ -2,14 +2,13 @@ from AnomalyClassifier import AnomalyClassifier
 
 from Constants import Constants
 
-WINDOW_SIZE = 20
 
 #This class extends the AnomalyClassifier class and implements the majority rule
 
 class MajorityRuleAnomalyClassifier(AnomalyClassifier):
-    def __init__(self, trainingSample, n_estimators, contamination, max_samples):
+    def __init__(self, trainingSample, n_estimators, contamination, max_samples, window_size):
         super().__init__(trainingSample, n_estimators, contamination, max_samples)
-        self.__windowSize = WINDOW_SIZE
+        self.__windowSize = window_size
 
     def __majorityRule(self, predictions):
         window = []

@@ -20,7 +20,7 @@ PERIODIC_JAMMING_FILE = 'data/periodic_jammer.txt'
 #This class launches the test cases by setting the parameters and plots the results
 class TestCaseLauncher: 
 
-    def __init__(self, n_estimators, max_samples, contamination, normal_traffic_size, constant_jamming_size, periodic_jamming_size): 
+    def __init__(self, n_estimators, max_samples, contamination, normal_traffic_size, constant_jamming_size, periodic_jamming_size, classifierType = Constants.STANDARD_ISOLATION_FOREST, windowSize = None): 
         self.__normalTraffic = FileHandler.readAndParseFile(NORMAL_TRAFFIC_FILE, normal_traffic_size)
         self.__constantJamming = FileHandler.readAndParseFile(CONSTANT_JAMMING_FILE, constant_jamming_size)
         self.__periodicJamming = FileHandler.readAndParseFile(PERIODIC_JAMMING_FILE, periodic_jamming_size)
@@ -28,6 +28,8 @@ class TestCaseLauncher:
         self.__maxSamples = max_samples
         self.__contamination = contamination
         self.__tr = None
+        self.__classifierType = classifierType
+        self.__windowSize = windowSize
     
     #returns the ground truth for the various types of data
     def __getNormalTrafficGroundTruth(self): 
@@ -71,7 +73,7 @@ class TestCaseLauncher:
         jammingTestInput, jammingGroundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
         testInput = np.concatenate((trainingSample, jammingTestInput))
         groundTruth = np.concatenate((self.__getNormalTrafficGroundTruth(), jammingGroundTruth))
-        self.__tr = TestRunner(trainingSample, testInput, groundTruth, self.__nEstimators, self.__contamination, self.__maxSamples)
+        self.__tr = TestRunner(trainingSample, testInput, groundTruth, self.__nEstimators, self.__contamination, self.__maxSamples, self.__classifierType, self.__windowSize)
 
     #Splits the data points based on the classification results
     def __separateInliersFromOutliers (self, inputData, classificationResults): 

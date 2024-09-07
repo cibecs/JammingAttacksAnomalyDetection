@@ -2,23 +2,20 @@
 from TestCaseLauncher import TestCaseLauncher
 from Constants import Constants
 
-from tmp import tmp
-
-
-
 #---- MODEL ----#
 N_ESTIMATORS = 100
 MAX_SAMPLES = 1.0
 CONTAMINATION = 0.1
+WINDOW_SIZE = 20
 
 NORMAL_TRAFFIC_SIZE = 10000
-CONSTANT_JAMMING_SIZE = 500
-PERIODIC_JAMMING_SIZE = 500
+CONSTANT_JAMMING_SIZE = 1000
+PERIODIC_JAMMING_SIZE = 2000
 
 #---- CONTAMINATION TEST ----#
 START_CONTAMINATION = 0.01
 END_CONTAMINATION = 0.5
-STEP_SIZE_CONTAMINATION = 0.01
+STEP_SIZE_CONTAMINATION = 0.1
 
 #---- ESTIMATORS TEST ----#
 START_ESTIMATORS = 1
@@ -30,17 +27,33 @@ START_MAX_SAMPLES = 1
 END_MAX_SAMPLES = NORMAL_TRAFFIC_SIZE
 STEP_SIZE_MAX_SAMPLES = 100
 
+#---- TESTING SAMPLES SIZE TEST ----#
+START_TESTING_SAMPLES_SIZE = 100
+END_TESTING_SAMPLES_SIZE = 10000
+STEP_SIZE_TESTING_SAMPLES_SIZE = 100
+
+#---- TRAINING SAMPLES SIZE TEST ----#
+
+START_TRAINING_SAMPLES_SIZE = 100
+END_TRAINING_SAMPLES_SIZE = 10000
+STEP_SIZE_TRAINING_SAMPLES_SIZE = 100
+
+#---- WINDOW SIZE TEST ----#
+START_WINDOW_SIZE = 1
+END_WINDOW_SIZE = 100
+STEP_SIZE_WINDOW_SIZE = 1
 
 
 def main():
-    #runBasicTests(Constants.PERIODIC_JAMMING,True, True)
-    runTimeTests(Constants.PERIODIC_JAMMING, True, True)
+    tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, CONSTANT_JAMMING_SIZE, PERIODIC_JAMMING_SIZE, Constants.MAJORITY_RULE_ISOLATION_FOREST, WINDOW_SIZE)
+    tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.WINDOW_SIZE_ID, START_WINDOW_SIZE, END_WINDOW_SIZE, STEP_SIZE_WINDOW_SIZE, True, True)
 
 
 
 
-def runBasicTests(testType,logResults, plotResults):
-    tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, CONSTANT_JAMMING_SIZE, PERIODIC_JAMMING_SIZE)
+
+def runBasicTests(testType,logResults, plotResults, classifierType, windowSize = None):
+    tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, CONSTANT_JAMMING_SIZE, PERIODIC_JAMMING_SIZE, classifierType, windowSize)
 
     tcl.basicNormalJammingConcatenatedTest(testType, logResults, plotResults)
 
@@ -59,18 +72,18 @@ def runMetricsTests(testType, logResults, plotResults):
 def runTimeTests(testType, logResults, plotResults): 
     tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, CONSTANT_JAMMING_SIZE, PERIODIC_JAMMING_SIZE)
 
-    #tcl.increasingMetricTimeTest(testType, Constants.N_ESTIMATORS_ID, START_ESTIMATORS, END_ESTIMATORS, STEP_SIZE_ESTIMATORS, logResults, plotResults)
-    #tcl.increasingMetricTimeTest(testType, Constants.CONTAMINATION_ID, START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION, logResults, plotResults)
-    #tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
-    #tcl.increasingMetricTimeTest(testType, Constants.TESTING_SAMPLES_SIZE_ID, 100, 10000, 100, logResults, plotResults)
-    tcl.increasingMetricTimeTest(testType, Constants.TRAINING_SAMPLES_SIZE_ID, 100, 10000, 100, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.N_ESTIMATORS_ID, START_ESTIMATORS, END_ESTIMATORS, STEP_SIZE_ESTIMATORS, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.CONTAMINATION_ID, START_CONTAMINATION, END_CONTAMINATION, STEP_SIZE_CONTAMINATION, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.TESTING_SAMPLES_SIZE_ID, START_TESTING_SAMPLES_SIZE, END_TESTING_SAMPLES_SIZE, STEP_SIZE_TESTING_SAMPLES_SIZE, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.TRAINING_SAMPLES_SIZE_ID, START_TRAINING_SAMPLES_SIZE, END_TRAINING_SAMPLES_SIZE, STEP_SIZE_TRAINING_SAMPLES_SIZE, logResults, plotResults)
 
     #jamming_size = 1 to evaluate classification time against a single data point
     jamming_traffic_size = 1
 
     tcl = TestCaseLauncher(N_ESTIMATORS, MAX_SAMPLES, CONTAMINATION, NORMAL_TRAFFIC_SIZE, jamming_traffic_size, jamming_traffic_size)
 
-    #tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
+    tcl.increasingMetricTimeTest(testType, Constants.MAX_SAMPLES_ID, START_MAX_SAMPLES, END_MAX_SAMPLES, STEP_SIZE_MAX_SAMPLES, logResults, plotResults)
 
    
 

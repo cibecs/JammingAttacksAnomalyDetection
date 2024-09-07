@@ -12,7 +12,7 @@ from MajorityRuleAnomalyClassifier import MajorityRuleAnomalyClassifier
 
 #This class runs the tests and returns the results
 class TestRunner:
-    def __init__(self, trainingSample, testingSample, groundTruth, n_estimators, contamination, max_samples): 
+    def __init__(self, trainingSample, testingSample, groundTruth, n_estimators, contamination, max_samples, classifierType, window_size): 
         self.__trainingSample = trainingSample
         self.__n_estimators = n_estimators
         self.__contamination = contamination
@@ -21,6 +21,8 @@ class TestRunner:
         self.__groundTruth = groundTruth
         self.__originalTestingSample = testingSample
         self.__originalTrainingSample = trainingSample
+        self.__windowSize = window_size
+        self.__classifierType = classifierType
         self.__classifier = None
 
     #Calculates the result metrics based on the classification results
@@ -33,9 +35,18 @@ class TestRunner:
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
 
+    def __getClassifier (self): 
+        if self.__classifierType == Constants.STANDARD_ISOLATION_FOREST: 
+            return AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        elif self.__classifierType == Constants.MAJORITY_RULE_ISOLATION_FOREST: 
+            return MajorityRuleAnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples, self.__windowSize)
+        else: 
+            raise Exception('Invalid classifier type chosen for testing')
+        
+
     #Prepares the test by training the model
     def __prepareTest(self): 
-        self.__classifier = MajorityRuleAnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        self.__classifier = self.__getClassifier()
         self.__classifier.trainModel()
     
     #Trains the model with the current parameters and classifies the testing sample
@@ -56,6 +67,8 @@ class TestRunner:
             self.__testingSample = self.__originalTestingSample[:value]
         elif parameter == Constants.TRAINING_SAMPLES_SIZE_ID:
             self.__trainingSample = self.__originalTrainingSample[:value]
+        elif parameter == Constants.WINDOW_SIZE_ID:
+            self.__windowSize = value
         else: 
             raise Exception('Invalid test parameter chosen for testing')
     
@@ -72,7 +85,7 @@ class TestRunner:
 
     #evaluates the training time needed for the model to be trained
     def evaluateTrainingTime (self): 
-        self.__classifier = MajorityRuleAnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
+        self.__classifier = self.__getClassifier()
         return timeit.timeit(self.__classifier.trainModel, number=1)
 
     #To evaluate the classification time of a single sample

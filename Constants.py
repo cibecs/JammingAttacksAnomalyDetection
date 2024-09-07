@@ -13,3 +13,8 @@ class Constants:
     MAX_SAMPLES_ID = "max_samples"
     TESTING_SAMPLES_SIZE_ID = "testing_samples_size"
     TRAINING_SAMPLES_SIZE_ID = "training_samples_size"
+    WINDOW_SIZE_ID = "window_size"
+
+    #---- CLASSIFIER TYPES ----#
+    STANDARD_ISOLATION_FOREST = 'Standard Isolation Forest'
+    MAJORITY_RULE_ISOLATION_FOREST = 'Majority Rule Isolation Forest'
