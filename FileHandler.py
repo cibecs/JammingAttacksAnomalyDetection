@@ -16,6 +16,7 @@ class FileHandler:
             raise FileNotFoundError('File not found or empty')
         
         return data
+    
     def __parseData (data): 
         parsedData = []
         for line in data: 

@@ -16,7 +16,7 @@ PERIODIC_JAMMING_FILE = 'data/periodic_jammer.txt'
 
 
 
-
+#Wrapper class for TestRunner
 #This class launches the test cases by setting the parameters and plots the results
 class TestCaseLauncher: 
 

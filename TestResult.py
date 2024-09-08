@@ -1,4 +1,4 @@
-
+#Represents the result of a test
 class TestResult: 
     def __init__ (self, inputData, n_estimators, contamination, max_samples, classification, resultMetrics, trainingTime = None, classificationTime = None): 
         self.inputData = inputData

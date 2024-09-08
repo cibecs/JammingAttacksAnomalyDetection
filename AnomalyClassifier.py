@@ -2,7 +2,7 @@ from sklearn.ensemble import IsolationForest
 
 class AnomalyClassifier: 
     
-
+    #Standard isolation forest classifier
     def __init__ (self, trainingSample, n_estimators, contamination, max_samples): 
         self.__trainingSample = trainingSample
         self.__n_estimators = n_estimators

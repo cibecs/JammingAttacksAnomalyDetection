@@ -49,12 +49,6 @@ class TestRunner:
         self.__classifier = self.__getClassifier()
         self.__classifier.trainModel()
     
-    #Trains the model with the current parameters and classifies the testing sample
-    def runTest (self): 
-        self.__prepareTest()
-        classificationResults = self.__classifier.classify(self.__testingSample)
-        return TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, classificationResults, self.__calculateResultMetrics(classificationResults))
-    
     #Sets the parameter to the value given
     def __setChosenParameter(self, parameter, value): 
         if parameter == Constants.N_ESTIMATORS_ID: 
@@ -71,6 +65,12 @@ class TestRunner:
             self.__windowSize = value
         else: 
             raise Exception('Invalid test parameter chosen for testing')
+    
+     #Trains the model with the current parameters and classifies the testing sample
+    def runTest (self): 
+        self.__prepareTest()
+        classificationResults = self.__classifier.classify(self.__testingSample)
+        return TestResult(self.__testingSample, self.__n_estimators, self.__contamination, self.__max_samples, classificationResults, self.__calculateResultMetrics(classificationResults))
     
     #Used to run all tests where a parameter is increased in a range
     def increasingParameterTest (self, startingValue, endingValue, stepSize, parameter): 
@@ -93,6 +93,7 @@ class TestRunner:
         testingSample = self.__testingSample
         return timeit.timeit(lambda: self.__classifier.classify(testingSample), number=1)
     
+    #Evaluates training time with a parameter increased in a range
     def increasingTimeTest(self, startingValue, endingValue, stepSize, parameter): 
         results = []
 
