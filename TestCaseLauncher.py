@@ -109,7 +109,7 @@ class TestCaseLauncher:
         if displayResultMetrics: 
             print(result)
         if displayPlot:
-            self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Basic Normal Traffic and Jamming Signal Concatenated Test', ['Data Point', 'RSSI[dBm]'])
+            self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Basic Normal Traffic and Jamming Signal Concatenated Test', ['Data Point', 'RSS[dBm]'])
 
     #Runs tests where a parameter is increased in a range
     def increasingMetricParameterTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
@@ -125,7 +125,7 @@ class TestCaseLauncher:
     def groundTruthTest (self, jammingType): 
         signal, groundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
         r = TestResult (signal, 0, 0, 0, groundTruth, None)
-        self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground Truth Test', ['Data Point', 'RSSI[dBm]'])
+        self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground Truth Test', ['Data Point', 'RSS[dBm]'])
 
     #time test with increasing metric value
     def increasingMetricTimeTest(self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True): 
