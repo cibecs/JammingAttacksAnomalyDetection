@@ -136,10 +136,10 @@ class TestCaseLauncher:
                 print(result)
             averageTrainingTime = np.mean([result.trainingTime for result in results])
             averageClassificationTime = np.mean([result.classificationTime for result in results])
-            print(f"Average training time: {averageTrainingTime *1000}ms")
-            print(f"Average classification time: {averageClassificationTime* 1000}ms")
+            print(f"Average training time: {averageTrainingTime}ms")
+            print(f"Average classification time: {averageClassificationTime}ms")
         if displayPlot:
             x = np.arange(startValue, endValue, stepSize)
-            self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Increasing ' + parameter_id + ' Time Test', [parameter_id, 'Time[s]'])
+            self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Increasing ' + parameter_id + ' Time Test', [parameter_id, 'Time[ms]'])
 
             

@@ -13,9 +13,9 @@ class TestResult:
     def __str__(self):
         toString =  f"n_estimators: {self.n_estimators}, contamination: {self.contamination}, testing_size: {len(self.inputData)} resultMetrics: {self.resultMetrics}"
         if (self.classificationTime is not None): 
-            toString += f"\n\tClassification time: {self.classificationTime * 1000}ms"
+            toString += f"\n\tClassification time: {self.classificationTime}ms"
         if (self.trainingTime is not None):
-            toString += f"\n\tTraining time: {self.trainingTime* 1000} ms"
+            toString += f"\n\tTraining time: {self.trainingTime} ms"
         return toString
 
 

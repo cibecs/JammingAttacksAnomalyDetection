@@ -10,17 +10,17 @@ class MajorityRuleAnomalyClassifier(AnomalyClassifier):
         super().__init__(trainingSample, n_estimators, contamination, max_samples)
         self.__windowSize = window_size
 
-    def __majorityRule(self, predictions):
+    def __majorityRule(self, classification):
         window = []
-        for index in range (len(predictions)): 
+        for index in range (len(classification)): 
             if (len(window) == self.__windowSize): 
                 window.pop(0)
-            window.append(predictions[index])
-            if (predictions[index] == Constants.OUTLIERS and window.count(Constants.OUTLIERS) <= self.__windowSize // 2): 
-                predictions[index] = Constants.INLIERS
-        return predictions
+            window.append(classification[index])
+            if (classification[index] == Constants.OUTLIERS and window.count(Constants.OUTLIERS) <= self.__windowSize // 2): 
+                classification[index] = Constants.INLIERS
+        return classification
                 
 
     def classify(self, data): 
-        predictions = super().classify(data)
-        return self.__majorityRule(predictions)
+        classification = super().classify(data)
+        return self.__majorityRule(classification)

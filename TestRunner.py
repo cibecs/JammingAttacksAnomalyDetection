@@ -86,12 +86,12 @@ class TestRunner:
     #evaluates the training time needed for the model to be trained
     def evaluateTrainingTime (self): 
         self.__classifier = self.__getClassifier()
-        return timeit.timeit(self.__classifier.trainModel, number=1)
+        return timeit.timeit(self.__classifier.trainModel, number=1) * 1000
 
     #To evaluate the classification time of a single sample
     def evaluateClassificationTime (self): 
         testingSample = self.__testingSample
-        return timeit.timeit(lambda: self.__classifier.classify(testingSample), number=1)
+        return timeit.timeit(lambda: self.__classifier.classify(testingSample), number=1) * 1000
     
     #Evaluates training time with a parameter increased in a range
     def increasingTimeTest(self, startingValue, endingValue, stepSize, parameter): 
