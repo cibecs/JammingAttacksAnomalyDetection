@@ -41,10 +41,6 @@ class TestCaseLauncher:
         pause = 557
         jamming_time = 372
         
-        # 293 + 372 + 557 = 1222 1
-        # 293 + 370 + 560 = 1223 3 
-        # 373 + 557 + 293 = 1223 2 
-
         samplesNumber = len(self.__periodicJamming)
 
         ground_truth = Constants.INLIERS * np.ones(samplesNumber)
@@ -99,8 +95,8 @@ class TestCaseLauncher:
     def __plotTime (self, x, results, labels, colors, title, axisLabels): 
             trainingTime = [result.trainingTime for result in results]
             classificationTime = [result.classificationTime for result in results]
-            Plotter.plotInSameGraph(x, [trainingTime], [labels[0]], colors[0], title, axisLabels)
-            Plotter.plotInSameGraph(x, [classificationTime], [labels[1]], colors[1], title, axisLabels)
+            Plotter.plotInSameGraph(x, [trainingTime], [labels[0]], colors[0], title + labels[0], axisLabels)
+            Plotter.plotInSameGraph(x, [classificationTime], [labels[1]], colors[1], title + labels[1], axisLabels)
 
     #Simple normal traffic concatenated with constant jamming test
     def basicNormalJammingConcatenatedTest(self, jammingType, displayResultMetrics = True, displayPlot = True ): 
@@ -109,7 +105,7 @@ class TestCaseLauncher:
         if displayResultMetrics: 
             print(result)
         if displayPlot:
-            self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Basic Normal Traffic and Jamming Signal Concatenated Test', ['Data Point', 'RSS[dBm]'])
+            self.__plotInliersOutliers(result, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Model classification of Normal Traffic concatenated with Jamming Signal', ['Data Point', 'RSS[dBm]'])
 
     #Runs tests where a parameter is increased in a range
     def increasingMetricParameterTest (self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True):
@@ -120,12 +116,12 @@ class TestCaseLauncher:
                 print(result)
         if displayPlot:
             x = np.arange(startValue, endValue, stepSize)
-            self.__plotMetrics(x, results, ['Accuracy', 'Precision', 'Recall', 'F1'], ['b', 'r', 'g', 'm'], 'Increasing ' + parameter_id + ' Test', [parameter_id, 'Metric Value'])
+            self.__plotMetrics(x, results, ['Accuracy', 'Precision', 'Recall', 'F1'], ['b', 'r', 'g', 'm'], 'Impact of ' + parameter_id + ' variation on performance metrics', [parameter_id, 'Metric Value'])
     
     def groundTruthTest (self, jammingType): 
         signal, groundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
         r = TestResult (signal, 0, 0, 0, groundTruth, None)
-        self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground Truth Test', ['Data Point', 'RSS[dBm]'])
+        self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground truth definition', ['Data Point', 'RSS[dBm]'])
 
     #time test with increasing metric value
     def increasingMetricTimeTest(self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True): 
@@ -140,6 +136,6 @@ class TestCaseLauncher:
             print(f"Average classification time: {averageClassificationTime}ms")
         if displayPlot:
             x = np.arange(startValue, endValue, stepSize)
-            self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Increasing ' + parameter_id + ' Time Test', [parameter_id, 'Time[ms]'])
+            self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Impact of ' + parameter_id + ' variation on ', [parameter_id, 'Time[ms]'])
 
             
