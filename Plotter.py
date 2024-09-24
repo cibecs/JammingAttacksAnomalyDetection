@@ -7,7 +7,7 @@ class Plotter:
         plt.xlabel(xLabel)
         plt.ylabel(yLabel)
         plt.title(graphTitle)
-        plt.legend(graphLabels)
+        plt.legend(graphLabels, loc = 'lower right')
         plt.show()
 
     def plotInSameGraph(x, graphs, graphLabels, colors, graphTitle, axisLabels): 
@@ -32,7 +32,7 @@ class Plotter:
     
     def scatterPlot (xPoints, yPoints, graphLabels, colors, graphTitle, axisLabels): 
         for i in range(len(xPoints)): 
-            plt.scatter(xPoints[i], yPoints[i], color=colors[i], label=graphLabels[i], s=5)
+            plt.scatter(xPoints[i], yPoints[i], color=colors[i], label=graphLabels[i], s=2)
         Plotter.labelGraph(axisLabels[0], axisLabels[1], graphLabels, graphTitle)
 
     def plotSegmentedGraph(x, y, n, color1, color2, graphTitle, axisLabels, pointLabels):

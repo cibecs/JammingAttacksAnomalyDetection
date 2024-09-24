@@ -41,10 +41,37 @@ def runTimeTests(testType, logResults, plotResults, classifierType, windowSize=N
 def runTestsInPaperOrder(classifierType, windowSize=None):
     tcl = TestCaseLauncher(Constants.N_ESTIMATORS, Constants.MAX_SAMPLES, Constants.CONTAMINATION, Constants.NORMAL_TRAFFIC_SIZE, Constants.CONSTANT_JAMMING_SIZE, Constants.PERIODIC_JAMMING_SIZE, classifierType, windowSize)
 
-    tcl.inputTest(Constants.CONSTANT_JAMMING)
+    #tcl.inputTest(Constants.CONSTANT_JAMMING)
 
+    #tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.N_ESTIMATORS_ID, Constants.START_ESTIMATORS, Constants.END_ESTIMATORS, Constants.STEP_SIZE_ESTIMATORS, True, True)
+    #tcl.increasingMetricTimeTest(Constants.CONSTANT_JAMMING, Constants.N_ESTIMATORS_ID, Constants.START_ESTIMATORS, Constants.END_ESTIMATORS, Constants.STEP_SIZE_ESTIMATORS, True, True)
+
+    #tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES, True, True)
+    #tcl.increasingMetricTimeTest(Constants.CONSTANT_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES, True, True)
 
     #tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.CONTAMINATION_ID, Constants.START_CONTAMINATION, Constants.END_CONTAMINATION, Constants.STEP_SIZE_CONTAMINATION, True, True)
+    #tcl.increasingMetricTimeTest(Constants.CONSTANT_JAMMING, Constants.CONTAMINATION_ID, Constants.START_CONTAMINATION, Constants.END_CONTAMINATION, Constants.STEP_SIZE_CONTAMINATION, True, True)
+
+
+    #tcl.basicNormalJammingConcatenatedTest(Constants.CONSTANT_JAMMING, True, False)
+    Constants.N_ESTIMATORS = 15
+    Constants.MAX_SAMPLES = 10
+    Constants.CONTAMINATION = 0.09
+
+    tcl = TestCaseLauncher(Constants.N_ESTIMATORS, Constants.MAX_SAMPLES, Constants.CONTAMINATION, Constants.NORMAL_TRAFFIC_SIZE, Constants.CONSTANT_JAMMING_SIZE, Constants.PERIODIC_JAMMING_SIZE, classifierType, windowSize)
+
+    #tcl.basicNormalJammingConcatenatedTest(Constants.CONSTANT_JAMMING, True, True)
+
+    classifierType = Constants.MAJORITY_RULE_ISOLATION_FOREST
+    windowSize = Constants.WINDOW_SIZE
+
+    tcl = TestCaseLauncher(Constants.N_ESTIMATORS, Constants.MAX_SAMPLES, Constants.CONTAMINATION, Constants.NORMAL_TRAFFIC_SIZE, Constants.CONSTANT_JAMMING_SIZE, Constants.PERIODIC_JAMMING_SIZE, classifierType, windowSize)
+
+    #tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.WINDOW_SIZE_ID, Constants.START_WINDOW_SIZE, Constants.END_WINDOW_SIZE, Constants.STEP_SIZE_WINDOW_SIZE, True, True)
+
+    #tcl.basicNormalJammingConcatenatedTest(Constants.CONSTANT_JAMMING, True, True)
+    tcl.basicNormalJammingConcatenatedTest(Constants.PERIODIC_JAMMING, True, True)
+    
 
 if __name__ == '__main__':
     main()
