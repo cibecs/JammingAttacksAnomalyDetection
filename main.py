@@ -3,8 +3,7 @@ from Constants import Constants
 
 
 def main():
-    runBasicTests(Constants.PERIODIC_JAMMING, False, False, Constants.STANDARD_ISOLATION_FOREST)
-    runBasicTests(Constants.PERIODIC_JAMMING, False, False, Constants.MAJORITY_RULE_ISOLATION_FOREST, Constants.WINDOW_SIZE)
+    runTestsInPaperOrder(Constants.STANDARD_ISOLATION_FOREST)
 
 def runBasicTests(testType, logResults, plotResults, classifierType, windowSize=None):
     tcl = TestCaseLauncher(Constants.N_ESTIMATORS, Constants.MAX_SAMPLES, Constants.CONTAMINATION, Constants.NORMAL_TRAFFIC_SIZE, Constants.CONSTANT_JAMMING_SIZE, Constants.PERIODIC_JAMMING_SIZE, classifierType, windowSize)
@@ -42,33 +41,10 @@ def runTimeTests(testType, logResults, plotResults, classifierType, windowSize=N
 def runTestsInPaperOrder(classifierType, windowSize=None):
     tcl = TestCaseLauncher(Constants.N_ESTIMATORS, Constants.MAX_SAMPLES, Constants.CONTAMINATION, Constants.NORMAL_TRAFFIC_SIZE, Constants.CONSTANT_JAMMING_SIZE, Constants.PERIODIC_JAMMING_SIZE, classifierType, windowSize)
 
-    tcl.increasingMetricParameterTest(Constants.PERIODIC_JAMMING, Constants.CONTAMINATION_ID, Constants.START_CONTAMINATION, Constants.END_CONTAMINATION, Constants.STEP_SIZE_CONTAMINATION)
-    tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.CONTAMINATION_ID, Constants.START_CONTAMINATION, Constants.END_CONTAMINATION, Constants.STEP_SIZE_CONTAMINATION)
+    tcl.inputTest(Constants.CONSTANT_JAMMING)
 
-    tcl.increasingMetricParameterTest(Constants.PERIODIC_JAMMING, Constants.N_ESTIMATORS_ID, Constants.START_ESTIMATORS, Constants.END_ESTIMATORS, Constants.STEP_SIZE_ESTIMATORS)
-    tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.N_ESTIMATORS_ID, Constants.START_ESTIMATORS, Constants.END_ESTIMATORS, Constants.STEP_SIZE_ESTIMATORS)
 
-    tcl.increasingMetricTimeTest(Constants.PERIODIC_JAMMING, Constants.N_ESTIMATORS_ID, Constants.START_ESTIMATORS, Constants.END_ESTIMATORS, Constants.STEP_SIZE_ESTIMATORS)
-    tcl.increasingMetricTimeTest(Constants.CONSTANT_JAMMING, Constants.N_ESTIMATORS_ID, Constants.START_ESTIMATORS, Constants.END_ESTIMATORS, Constants.STEP_SIZE_ESTIMATORS)
-
-    tcl.groundTruthTest(Constants.CONSTANT_JAMMING)
-    tcl.basicNormalJammingConcatenatedTest(Constants.CONSTANT_JAMMING)
-    tcl.groundTruthTest(Constants.PERIODIC_JAMMING)
-    tcl.basicNormalJammingConcatenatedTest(Constants.PERIODIC_JAMMING)
-
-    tcl.increasingMetricParameterTest(Constants.PERIODIC_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES, False)
-    tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES, False)
-
-    tcl.increasingMetricTimeTest(Constants.PERIODIC_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES)
-    tcl.increasingMetricTimeTest(Constants.CONSTANT_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES)
-
-    # jamming size = 1 to evaluate classification time against a single data point
-    jamming_traffic_size = 1
-
-    tcl = TestCaseLauncher(Constants.N_ESTIMATORS, Constants.MAX_SAMPLES, Constants.CONTAMINATION, Constants.NORMAL_TRAFFIC_SIZE, jamming_traffic_size, jamming_traffic_size, classifierType, windowSize)
-    tcl.increasingMetricTimeTest(Constants.PERIODIC_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES)
-    tcl.increasingMetricTimeTest(Constants.CONSTANT_JAMMING, Constants.MAX_SAMPLES_ID, Constants.START_MAX_SAMPLES, Constants.END_MAX_SAMPLES, Constants.STEP_SIZE_MAX_SAMPLES)
-
+    #tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.CONTAMINATION_ID, Constants.START_CONTAMINATION, Constants.END_CONTAMINATION, Constants.STEP_SIZE_CONTAMINATION, True, True)
 
 if __name__ == '__main__':
     main()

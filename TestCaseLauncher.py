@@ -122,6 +122,11 @@ class TestCaseLauncher:
         signal, groundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
         r = TestResult (signal, 0, 0, 0, groundTruth, None)
         self.__plotInliersOutliers(r, ['Normal Traffic', 'Jamming Signal'], ['b', 'r'], 'Ground truth definition', ['Data Point', 'RSS[dBm]'])
+    
+    def inputTest (self, jammingType):
+        jammingSignal, groundTruth = self.__getJammingSignalAndGroundTruth(jammingType)
+        testedSignal = np.concatenate((self.__normalTraffic, jammingSignal))
+        Plotter.plotSegmentedGraph(range(len(testedSignal)), testedSignal, len(self.__normalTraffic), 'b', 'r', 'Input data in the case of Constant Jamming', ['Data Point', 'RSS[dBm]'], ['Normal Traffic', 'Jamming Signal'])
 
     #time test with increasing metric value
     def increasingMetricTimeTest(self, jammingType, parameter_id, startValue, endValue, stepSize, displayResultMetrics = True, displayPlot = True): 

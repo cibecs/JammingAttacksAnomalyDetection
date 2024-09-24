@@ -35,3 +35,10 @@ class Plotter:
             plt.scatter(xPoints[i], yPoints[i], color=colors[i], label=graphLabels[i], s=5)
         Plotter.labelGraph(axisLabels[0], axisLabels[1], graphLabels, graphTitle)
 
+    def plotSegmentedGraph(x, y, n, color1, color2, graphTitle, axisLabels, pointLabels):
+        plt.scatter(x[:n], y[:n], color=color1, label=pointLabels[0], s=2)
+
+        plt.scatter(x[n:], y[n:], color=color2, label=pointLabels[1], s=2)
+        
+        # Use the existing labelGraph function to set labels and display
+        Plotter.labelGraph(axisLabels[0], axisLabels[1], pointLabels, graphTitle)
