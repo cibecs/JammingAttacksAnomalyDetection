@@ -70,7 +70,9 @@ def runTestsInPaperOrder(classifierType, windowSize=None):
     #tcl.increasingMetricParameterTest(Constants.CONSTANT_JAMMING, Constants.WINDOW_SIZE_ID, Constants.START_WINDOW_SIZE, Constants.END_WINDOW_SIZE, Constants.STEP_SIZE_WINDOW_SIZE, True, True)
 
     #tcl.basicNormalJammingConcatenatedTest(Constants.CONSTANT_JAMMING, True, True)
-    tcl.basicNormalJammingConcatenatedTest(Constants.PERIODIC_JAMMING, True, True)
+    #tcl.basicNormalJammingConcatenatedTest(Constants.PERIODIC_JAMMING, True, True)
+
+    tcl.standardMajorityRuleTimeComparisonTest(Constants.CONSTANT_JAMMING, Constants.TESTING_SAMPLES_SIZE_ID, Constants.START_TESTING_SAMPLES_SIZE, Constants.END_TESTING_SAMPLES_SIZE, Constants.STEP_SIZE_TESTING_SAMPLES_SIZE, True, True)
     
 
 if __name__ == '__main__':
