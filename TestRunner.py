@@ -27,11 +27,12 @@ class TestRunner:
 
     #Calculates the result metrics based on the classification results
     def __calculateResultMetrics (self, classificationResults): 
-        accuracy = accuracy_score(self.__groundTruth, classificationResults)
-        precision = precision_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
-        recall = recall_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
-        f1 = f1_score(self.__groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
-        confusionMatrix = confusion_matrix(self.__groundTruth, classificationResults, labels=[Constants.INLIERS, Constants.OUTLIERS])
+        groundTruth = self.__groundTruth[:len(classificationResults)]
+        accuracy = accuracy_score(groundTruth, classificationResults)
+        precision = precision_score(groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
+        recall = recall_score(groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
+        f1 = f1_score(groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
+        confusionMatrix = confusion_matrix(groundTruth, classificationResults, labels=[Constants.INLIERS, Constants.OUTLIERS])
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
 

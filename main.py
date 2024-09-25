@@ -71,9 +71,8 @@ def runTestsInPaperOrder(classifierType, windowSize=None):
 
     #tcl.basicNormalJammingConcatenatedTest(Constants.CONSTANT_JAMMING, True, True)
     #tcl.basicNormalJammingConcatenatedTest(Constants.PERIODIC_JAMMING, True, True)
-
-    tcl.standardMajorityRuleTimeComparisonTest(Constants.CONSTANT_JAMMING, Constants.TESTING_SAMPLES_SIZE_ID, Constants.START_TESTING_SAMPLES_SIZE, Constants.END_TESTING_SAMPLES_SIZE, Constants.STEP_SIZE_TESTING_SAMPLES_SIZE, True, True)
     
+    tcl.compareModels(Constants.CONSTANT_JAMMING, Constants.TESTING_SAMPLES_SIZE_ID, Constants.START_TESTING_SAMPLES_SIZE, Constants.END_TESTING_SAMPLES_SIZE, Constants.STEP_SIZE_TESTING_SAMPLES_SIZE, [Constants.STANDARD_ISOLATION_FOREST, Constants.MAJORITY_RULE_ISOLATION_FOREST], ['r', 'b'], True, True)
 
 if __name__ == '__main__':
     main()

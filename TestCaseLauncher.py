@@ -143,21 +143,21 @@ class TestCaseLauncher:
             x = np.arange(startValue, endValue, stepSize)
             self.__plotTime(x, results, ['Training Time', 'Classification Time'], ['b', 'r'], 'Impact of ' + parameter_id + ' variation on ', [parameter_id, 'Time[ms]'])
 
-    def standardMajorityRuleTimeComparisonTest(self, jammingType, parameter_id, startValue, endValue, stepSize,displayResultMetrics = True, displayPlot = True): 
-        self.__classifierType = Constants.STANDARD_ISOLATION_FOREST
-        self.__prepareModel(jammingType)
-        standardResults = self.__tr.increasingTimeTest( startValue, endValue, stepSize, parameter_id)
-        self.__classifierType = Constants.MAJORITY_RULE_ISOLATION_FOREST
-        self.__prepareModel(jammingType)
-        majorityRuleResults = self.__tr.increasingTimeTest( startValue, endValue, stepSize, parameter_id)
+    #Compares the performance of two models based on a parameter    
+    def compareModels(self, jammingType, parameter_id, startValue, endValue, stepSize, models, plotColors, displayResultMetrics = True, displayPlot = True):
+        results = []
+        for model in models:
+            self.__classifierType = model
+            self.__prepareModel(jammingType)
+            results.append(self.__tr.increasingTimeTest(startValue, endValue, stepSize, parameter_id))
         if displayResultMetrics: 
-            for result in standardResults: 
-                print(result)
-            for result in majorityRuleResults: 
-                print(result)
+            for result in results: 
+                for r in result:
+                    print(r)
         if displayPlot:
             x = np.arange(startValue, endValue, stepSize)
-            trainingTimes = [[result.trainingTime for result in standardResults], [result.trainingTime for result in majorityRuleResults]]
-            classificationTimes = [[result.classificationTime for result in standardResults], [result.classificationTime for result in majorityRuleResults]]
-            Plotter.plotInSameGraph(x, trainingTimes, ['Standard Isolation Forest', 'Majority Rule Isolation Forest'], ['b', 'r'], 'Impact of testing sample size variation on training time', ['Testing Sample Size', 'Time[ms]'])
-            Plotter.plotInSameGraph(x, classificationTimes, ['Standard Isolation Forest', 'Majority Rule Isolation Forest'], ['b', 'r'], 'Impact of testing sample size variation on classification time', ['Testing Sample Size', 'Time[ms]'])
+            trainingTimes = [[result.trainingTime for result in res] for res in results]
+            classificationTimes = [[result.classificationTime for result in res] for res in results]
+            Plotter.plotInSameGraph(x, trainingTimes, models, plotColors , 'Impact of ' + parameter_id + ' variation on training time', [parameter_id, 'Time[ms]'])
+            Plotter.plotInSameGraph(x, classificationTimes, models, plotColors, 'Impact of ' + parameter_id + ' variation on classification time', [parameter_id, 'Time[ms]'])
+    
