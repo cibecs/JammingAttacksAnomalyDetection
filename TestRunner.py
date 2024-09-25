@@ -5,7 +5,7 @@ import timeit
 from TestResult import TestResult
 from AnomalyClassifier import AnomalyClassifier
 from ResultMetrics import ResultMetrics
-from Constants import Constants
+from Parameters import Parameters
 
 from MajorityRuleAnomalyClassifier import MajorityRuleAnomalyClassifier
 
@@ -29,17 +29,17 @@ class TestRunner:
     def __calculateResultMetrics (self, classificationResults): 
         groundTruth = self.__groundTruth[:len(classificationResults)]
         accuracy = accuracy_score(groundTruth, classificationResults)
-        precision = precision_score(groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
-        recall = recall_score(groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
-        f1 = f1_score(groundTruth, classificationResults, pos_label=Constants.OUTLIERS, zero_division=1)
-        confusionMatrix = confusion_matrix(groundTruth, classificationResults, labels=[Constants.INLIERS, Constants.OUTLIERS])
+        precision = precision_score(groundTruth, classificationResults, pos_label=Parameters.OUTLIERS, zero_division=1)
+        recall = recall_score(groundTruth, classificationResults, pos_label=Parameters.OUTLIERS, zero_division=1)
+        f1 = f1_score(groundTruth, classificationResults, pos_label=Parameters.OUTLIERS, zero_division=1)
+        confusionMatrix = confusion_matrix(groundTruth, classificationResults, labels=[Parameters.INLIERS, Parameters.OUTLIERS])
         
         return ResultMetrics(accuracy, precision, recall, f1, confusionMatrix)
 
     def __getClassifier (self): 
-        if self.__classifierType == Constants.STANDARD_ISOLATION_FOREST: 
+        if self.__classifierType == Parameters.STANDARD_ISOLATION_FOREST: 
             return AnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples)
-        elif self.__classifierType == Constants.MAJORITY_RULE_ISOLATION_FOREST: 
+        elif self.__classifierType == Parameters.MAJORITY_RULE_ISOLATION_FOREST: 
             return MajorityRuleAnomalyClassifier(self.__trainingSample, self.__n_estimators, self.__contamination, self.__max_samples, self.__windowSize)
         else: 
             raise Exception('Invalid classifier type chosen for testing')
@@ -52,17 +52,17 @@ class TestRunner:
     
     #Sets the parameter to the value given
     def __setChosenParameter(self, parameter, value): 
-        if parameter == Constants.N_ESTIMATORS_ID: 
+        if parameter == Parameters.N_ESTIMATORS_ID: 
             self.__n_estimators = value
-        elif parameter == Constants.CONTAMINATION_ID: 
+        elif parameter == Parameters.CONTAMINATION_ID: 
             self.__contamination = value
-        elif parameter == Constants.MAX_SAMPLES_ID: 
+        elif parameter == Parameters.MAX_SAMPLES_ID: 
             self.__max_samples = value
-        elif parameter == Constants.TESTING_SAMPLES_SIZE_ID:
+        elif parameter == Parameters.TESTING_SAMPLES_SIZE_ID:
             self.__testingSample = self.__originalTestingSample[:value]
-        elif parameter == Constants.TRAINING_SAMPLES_SIZE_ID:
+        elif parameter == Parameters.TRAINING_SAMPLES_SIZE_ID:
             self.__trainingSample = self.__originalTrainingSample[:value]
-        elif parameter == Constants.WINDOW_SIZE_ID:
+        elif parameter == Parameters.WINDOW_SIZE_ID:
             self.__windowSize = value
         else: 
             raise Exception('Invalid test parameter chosen for testing')

@@ -1,6 +1,6 @@
 from AnomalyClassifier import AnomalyClassifier
 
-from Constants import Constants
+from Parameters import Parameters
 
 
 #This class extends the AnomalyClassifier class and implements the majority rule
@@ -16,8 +16,8 @@ class MajorityRuleAnomalyClassifier(AnomalyClassifier):
             if (len(window) == self.__windowSize): 
                 window.pop(0)
             window.append(classification[index])
-            if (classification[index] == Constants.OUTLIERS and window.count(Constants.OUTLIERS) <= self.__windowSize // 2): 
-                classification[index] = Constants.INLIERS
+            if (classification[index] == Parameters.OUTLIERS and window.count(Parameters.OUTLIERS) <= self.__windowSize // 2): 
+                classification[index] = Parameters.INLIERS
         return classification
                 
 

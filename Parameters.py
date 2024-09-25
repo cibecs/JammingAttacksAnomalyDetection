@@ -1,4 +1,4 @@
-class Constants: 
+class Parameters: 
     #---- MODEL ----#
     N_ESTIMATORS = 100
     MAX_SAMPLES = 'auto'
