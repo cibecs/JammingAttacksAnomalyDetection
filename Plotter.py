@@ -7,7 +7,7 @@ class Plotter:
         plt.xlabel(xLabel)
         plt.ylabel(yLabel)
         plt.title(graphTitle)
-        plt.legend(graphLabels, loc = 'upper right')
+        plt.legend(graphLabels, loc = 'lower right')
         plt.show()
 
     def plotInSameGraph(x, graphs, graphLabels, colors, graphTitle, axisLabels): 
