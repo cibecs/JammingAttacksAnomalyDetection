@@ -60,18 +60,15 @@ def runTestsInPaperOrder(classifierType, windowSize=None):
     standard_IF = [[2000, 0], [1993, 18007]]
     majorityRule_IF = [[1982,18],[27, 19973]]
 
+    plotConfusionMatrix(standard_IF, 'Standard Isolation Forest')
+    plotConfusionMatrix(tuned_IF, 'Tuned Isolation Forest')
+    plotConfusionMatrix(majorityRule_IF, 'Majority Rule Isolation Forest')
+    
 
+def plotConfusionMatrix (matrix, title):
     axisLabels = ['Predicted Class', 'True Class']
     classificationLabels = [['Jamming','Normal Traffic'], ['Jamming', 'Normal Traffic']]
-
-    graphTitle = 'Confusion Matrix for Standard Isolation Forest'
-    Plotter.plotConfusionMatrix(getPercentagesMatrix(standard_IF), graphTitle, axisLabels, classificationLabels)
-
-    graphTitle = 'Confusion Matrix for Tuned Isolation Forest'
-    Plotter.plotConfusionMatrix(getPercentagesMatrix(tuned_IF), graphTitle, axisLabels, classificationLabels)
-
-    graphTitle = 'Confusion Matrix for Majority Rule Isolation Forest'
-    Plotter.plotConfusionMatrix(getPercentagesMatrix(majorityRule_IF), graphTitle, axisLabels, classificationLabels)
+    Plotter.plotConfusionMatrix(getPercentagesMatrix(matrix), title, axisLabels, classificationLabels)
 
 def getPercentagesMatrix(confusion_matrix):
     total_tp = confusion_matrix[0][0] + confusion_matrix[0][1]  # Total for 'Jamming'
