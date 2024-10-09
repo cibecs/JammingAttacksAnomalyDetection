@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 
 class Plotter: 
 
@@ -42,3 +42,12 @@ class Plotter:
         
         # Use the existing labelGraph function to set labels and display
         Plotter.labelGraph(axisLabels[0], axisLabels[1], pointLabels, graphTitle)
+    
+    def plotConfusionMatrix (matrixValues, graphTitle, axisLabels, classificationLabels): 
+        plt.figure()
+        sns.heatmap(matrixValues, annot=True, fmt='.2%', cmap='Blues', xticklabels=classificationLabels[0], yticklabels=classificationLabels[1])
+        plt.xlabel(axisLabels[0])
+        plt.ylabel(axisLabels[1])
+        plt.title(graphTitle)
+        plt.show()
+
