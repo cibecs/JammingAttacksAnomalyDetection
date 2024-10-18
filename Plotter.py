@@ -44,6 +44,7 @@ class Plotter:
         Plotter.labelGraph(axisLabels[0], axisLabels[1], pointLabels, graphTitle)
     
     def plotConfusionMatrix (matrixValues, graphTitle, axisLabels, classificationLabels): 
+        sns.set_theme(font_scale=1.15)
         plt.figure()
         sns.heatmap(matrixValues, annot=True, fmt='.2%', cmap='Blues', xticklabels=classificationLabels[0], yticklabels=classificationLabels[1])
         plt.xlabel(axisLabels[0])
